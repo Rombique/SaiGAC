@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SaiGAC.DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,12 @@ namespace SaiGAC.GUI
         public Main()
         {
             InitializeComponent();
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            var db = new SQLite();
+            db.InitDatabase();
         }
     }
 }

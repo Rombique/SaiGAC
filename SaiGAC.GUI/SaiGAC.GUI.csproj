@@ -79,5 +79,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SaiGAC.DAL\SaiGAC.DAL.csproj">
+      <Project>{A1F52361-D6BE-4BD5-A0D5-2862BAC28652}</Project>
+      <Name>SaiGAC.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
