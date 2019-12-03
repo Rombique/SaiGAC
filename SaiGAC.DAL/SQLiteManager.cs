@@ -1,4 +1,5 @@
 ﻿using SaiGAC.DAL.Entities;
+using SaiGAC.DAL.Repositories;
 using SQLite;
 using System;
 using System.IO;
@@ -6,16 +7,15 @@ using System.Linq;
 
 namespace SaiGAC.DAL
 {
-    public class SQLite
+    public class SQLiteManager
     {
-        public void InitDatabase()
+        public readonly UserPathsRepository PathsRepository;
+        public SQLiteManager()
         {
             string databasePath = GetDatabasePath();
-
-            using (SQLiteConnection db = new SQLiteConnection(databasePath))
-            {
-                db.CreateTable<UserPath>();
-            }
+            SQLiteConnection db = new SQLiteConnection(databasePath);
+            db.CreateTable<UserPath>();
+            PathsRepository = new UserPathsRepository(db);
         }
 
         public string GetDatabasePath()

@@ -16,10 +16,7 @@ namespace SaiGAC.DAL.Repositories
             Connection = connection;
         }
 
-        public void Add(T entity)
-        {
-            Connection.Insert(entity);
-        }
+        public void Add(T entity) => Connection.Insert(entity);
 
         public void Dispose()
         {
@@ -35,18 +32,13 @@ namespace SaiGAC.DAL.Repositories
             return Connection.Table<T>().FirstOrDefault(t => GetId(t) == id.ToString());
         }
 
-        public IEnumerable<T> GetWhere(Expression<Func<T, bool>> predicate) => Connection.Table<T>().Where(predicate);
+        public IEnumerable<T> GetWhere(Expression<Func<T, bool>> predicate) =>
+            Connection.Table<T>().Where(predicate);
 
-        public void Remove(int id)
-        {
-            Connection.Delete<T>(id);
-        }
-
-        public void Update(T entity)
-        {
-            Connection.Update(entity);
-        }
-
+        public void Remove(int id) => Connection.Delete<T>(id);
+        
+        public void Update(T entity) => Connection.Update(entity);
+        
         private string GetId(T obj)
         {
             Type t = typeof(T);
