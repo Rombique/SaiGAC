@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SaiGAC.DAL;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,16 @@ namespace SaiGAC.GUI
 {
     class GACManager
     {
+        public string CopyToGAC(string project, string gacPath)
+        {
+            List<string> paths = new SQLiteManager().PathsRepository.GetByTitle(project)
+                .Select((item) => item.Path).ToList();
+            GACManager gacManager = new GACManager();
+
+            var dynOutput = paths.Select((path) => gacManager.RunProcess(gacPath, path));
+            return string.Join("\n", dynOutput);
+        }
+
         public string[] GetGacUtilValidPaths()
         {
             string gacFolder = "C:\\Program Files (x86)\\Microsoft SDKs\\Windows";
@@ -24,6 +35,7 @@ namespace SaiGAC.GUI
                 gacUtil.StartInfo.FileName = gacUtilPath;
                 gacUtil.StartInfo.UseShellExecute = false;
                 gacUtil.StartInfo.RedirectStandardOutput = true;
+                gacUtil.StartInfo.CreateNoWindow = false;
                 gacUtil.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
                 gacUtil.StartInfo.Arguments = string.Format("-i \"{0}\"", dllPath);
                 gacUtil.Start();

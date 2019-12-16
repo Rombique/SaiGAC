@@ -1,14 +1,7 @@
 ﻿using SaiGAC.DAL;
-using SaiGAC.DAL.Entities;
-using SaiGAC.DAL.Repositories;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SaiGAC.GUI
@@ -48,7 +41,8 @@ namespace SaiGAC.GUI
 
             sqliteManager.PathsRepository.RemoveWithTitle(projectsComboBox.Text, pathsListBox.Items.OfType<string>().ToArray());
             sqliteManager.PathsRepository.AddPaths(projectsComboBox.Text, pathsListBox.Items.OfType<string>().ToArray());
-            this.Close();
+            ((Main)Owner).SetProjectBoxItems();
+            Close();
         }
 
         private void ProjectsComboBox_SelectedValueChanged(object sender, EventArgs e)

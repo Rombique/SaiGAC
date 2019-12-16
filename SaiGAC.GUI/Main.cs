@@ -1,12 +1,7 @@
 ﻿using SaiGAC.DAL;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SaiGAC.GUI
@@ -18,20 +13,25 @@ namespace SaiGAC.GUI
             InitializeComponent();
         }
 
-        private void Main_Load(object sender, EventArgs e)
+        public void SetProjectBoxItems()
         {
+            projectsBox.Items.Clear();
             string[] projects = new SQLiteManager().PathsRepository.GetAllTitles().ToArray();
             projectsBox.Items.AddRange(projects);
             if (projectsBox.Items.Count > 0)
                 projectsBox.SelectedIndex = 0;
+        }
 
+        private void Main_Load(object sender, EventArgs e)
+        {
+            SetProjectBoxItems();
             GACManager gacManager = new GACManager();
             string[] gacPaths = gacManager.GetGacUtilValidPaths();
             gacPathsBox.Items.AddRange(GetPathsItems(gacPaths));
             if (gacPathsBox.Items.Count > 0)
                 gacPathsBox.SelectedIndex = 0;
         }
-
+        
         private object[] GetPathsItems(string[] gacPaths)
         {
             return gacPaths.Select((i) => new { Display = i.Substring(46), Value = i }).ToArray();
@@ -39,19 +39,17 @@ namespace SaiGAC.GUI
 
         private void СhangeConfBtn_Click(object sender, EventArgs e)
         {
-            ManagePathsForm form = new ManagePathsForm();
-            form.ShowDialog();
+            using (ManagePathsForm form = new ManagePathsForm())
+            {
+                form.ShowDialog(this);
+            }
         }
 
         private void СopyToGacBtn_Click(object sender, EventArgs e)
         {
-            List<string> paths = new SQLiteManager().PathsRepository.GetByTitle(projectsBox.Text)
-                .Select((item) => item.Path).ToList();
             GACManager gacManager = new GACManager();
             dynamic selectedItem = gacPathsBox.SelectedItem;
-            
-            var dynOutput = paths.Select((path) => gacManager.RunProcess(selectedItem.Value, path));
-            string output = string.Join("\n", dynOutput);
+            string output = gacManager.CopyToGAC(projectsBox.Text, selectedItem.Value);
             logBox.AppendText(output);
         }
     }
