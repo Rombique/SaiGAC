@@ -22,9 +22,7 @@ namespace SaiGAC.DAL
         {
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split('\\').LastOrDefault();
-            string path = Path.Combine(documentsPath, $"{userName}.db");
-
-            return path;
+            return Path.Combine(documentsPath, $"{userName}.db");
         }
     }
 }
